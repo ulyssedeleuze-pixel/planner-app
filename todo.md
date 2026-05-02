@@ -43,3 +43,12 @@
 - [x] Ajouter les statistiques de performance (tâches completées, crédits gagnés, etc.)
 - [x] Tester le système de récompense end-to-end
 - [x] Mettre à jour le checkpoint final
+
+
+## Phase 3c : Validation Proactive avec Notifications
+
+- [x] Implémenter un service de vérification des tâches terminées
+- [x] Créer une modale de validation proactive
+- [x] Intégrer les notifications à la fin des tâches
+- [x] Gérer la persistance des tâches complétées
+- [x] Tester le système de validation proactive end-to-end
