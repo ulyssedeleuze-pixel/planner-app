@@ -29,10 +29,10 @@ export class TaskCompletionService {
     // Vérifier immédiatement
     await this.checkCompletedTasks();
 
-    // Vérifier toutes les minutes
+    // Vérifier toutes les 10 secondes pour une meilleure réactivité
     this.checkInterval = setInterval(
       () => this.checkCompletedTasks(),
-      60 * 1000
+      10 * 1000
     );
   }
 
@@ -205,5 +205,13 @@ export class TaskCompletionService {
     } catch (error) {
       console.error("Error resetting notifications:", error);
     }
+  }
+
+  /**
+   * Force une vérification immédiate (utile pour le débogage)
+   */
+  static async forceCheck() {
+    console.log("[TaskCompletionService] Vérification forcée");
+    await this.checkCompletedTasks();
   }
 }

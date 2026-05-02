@@ -73,6 +73,10 @@ export default function ValidationScreen() {
     [addCoins]
   );
 
+  const handleRefresh = useCallback(async () => {
+    await TaskCompletionService.forceCheck();
+  }, []);
+
   const handleReject = useCallback(
     (taskId: string, taskTitle: string) => {
       Alert.alert(
