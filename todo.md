@@ -30,3 +30,16 @@
 - [x] Ajouter l'onglet "Aventure" à la navigation
 - [x] Tester le système de gamification end-to-end
 - [x] Sauvegarder le checkpoint final
+
+
+## Phase 3b : Système de Récompense Avancé
+
+- [x] Restructurer les événements pour inclure durée estimée et temps réel
+- [x] Implémenter le calcul de crédits basé sur la durée (1h = X crédits)
+- [x] Ajouter le système de validation manuelle avant octroi des crédits
+- [x] Créer l'écran de validation des tâches completées
+- [x] Implémenter le bonus de semaine complète
+- [x] Créer l'historique des récompenses gagnées
+- [x] Ajouter les statistiques de performance (tâches completées, crédits gagnés, etc.)
+- [x] Tester le système de récompense end-to-end
+- [x] Mettre à jour le checkpoint final

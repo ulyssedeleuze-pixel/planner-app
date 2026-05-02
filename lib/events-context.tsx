@@ -36,6 +36,9 @@ export interface CalendarEvent {
   reminders: ReminderOffset[];
   notificationIds?: string[];
   allDay?: boolean;
+  estimatedDurationMinutes?: number; // Durée estimée en minutes
+  completed?: boolean; // Marqué comme complété
+  completedAt?: string; // ISO string
 }
 
 export interface EventsState {
