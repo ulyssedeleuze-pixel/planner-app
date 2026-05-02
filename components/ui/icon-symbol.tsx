@@ -18,6 +18,22 @@ const MAPPING = {
   "paperplane.fill": "send",
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",
+  "calendar": "calendar-today",
+  "calendar.badge.plus": "event",
+  "list.bullet": "format-list-bulleted",
+  "bell.fill": "notifications",
+  "clock.fill": "schedule",
+  "plus": "add",
+  "pencil": "edit",
+  "trash": "delete",
+  "xmark": "close",
+  "checkmark": "check",
+  "chevron.left": "chevron-left",
+  "chevron.down": "expand-more",
+  "chevron.up": "expand-less",
+  "circle.fill": "circle",
+  "calendar.day.timeline.left": "view-day",
+  "rectangle.grid.1x2": "view-week",
 } as IconMapping;
 
 /**

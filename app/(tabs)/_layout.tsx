@@ -1,9 +1,9 @@
 import { Tabs } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Platform } from "react-native";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Platform } from "react-native";
 import { useColors } from "@/hooks/use-colors";
 
 export default function TabLayout() {
@@ -15,7 +15,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.tint,
+        tabBarActiveTintColor: colors.primary,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
@@ -26,13 +26,46 @@ export default function TabLayout() {
           borderTopColor: colors.border,
           borderTopWidth: 0.5,
         },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: "500",
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Calendrier",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={24} name="calendar" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="week"
+        options={{
+          title: "Semaine",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={24} name="rectangle.grid.1x2" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="events"
+        options={{
+          title: "Événements",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={24} name="list.bullet" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="reminders"
+        options={{
+          title: "Rappels",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={24} name="bell.fill" color={color} />
+          ),
         }}
       />
     </Tabs>
