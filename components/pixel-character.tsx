@@ -351,3 +351,4 @@ const styles = StyleSheet.create({
 });
 export { ITEM_PIXEL_ART };
 export type { PixelGrid };
+export { PixelArt };
