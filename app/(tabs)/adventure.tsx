@@ -14,6 +14,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 import { useAdventure, EquipmentSlot } from "@/lib/adventure-context";
+import { PixelCharacter } from "@/components/pixel-character";
 
 const EQUIPMENT_SLOT_LABELS: Record<EquipmentSlot, string> = {
   head: "Tête",
@@ -228,11 +229,9 @@ export default function AdventureScreen() {
         {/* Character Display */}
         <View style={styles.characterSection}>
           <View style={styles.characterContainer}>
-            <Image
-              source={{
-                uri: "https://d2xsxph8kpxj0f.cloudfront.net/310519663619789233/jJUmEzTwYt7UYT9DbPShs5/pixel-character-base-GQmK4MvgUovtMwkzEM8HZB.webp",
-              }}
-              style={styles.characterImage}
+            <PixelCharacter
+              equippedItems={state.equippedItems}
+              size={200}
             />
             <Text style={styles.characterName}>Votre Héros</Text>
             <View style={styles.levelBadge}>
