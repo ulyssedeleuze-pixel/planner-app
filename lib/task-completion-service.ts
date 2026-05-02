@@ -72,17 +72,18 @@ export class TaskCompletionService {
       for (const event of events) {
         const endTime = new Date(event.endDate);
         const isCompleted = endTime <= now;
-        const alreadyNotified = savedNotifications.some((n) => n.eventId === event.id && !n.dismissed);
+        // Verifier s'il existe DEJA une notification pour cette tache (peu importe l'etat)
+        const alreadyProcessed = savedNotifications.some((n) => n.eventId === event.id);
 
         console.log("[TaskCompletionService] Vérification:", {
           title: event.title,
           endTime: endTime.toISOString(),
           isCompleted,
-          alreadyNotified,
+          alreadyProcessed,
         });
 
-        // Vérifier si la tâche est terminée et pas déjà notifiée
-        if (isCompleted && !alreadyNotified) {
+        // Vérifier si la tâche est terminée et qu'on n'a pas déjà créé une notification pour elle
+        if (isCompleted && !alreadyProcessed) {
           // Envoyer la notification
           const notificationId = await this.sendCompletionNotification(event);
 
