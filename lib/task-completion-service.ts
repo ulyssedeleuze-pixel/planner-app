@@ -54,20 +54,35 @@ export class TaskCompletionService {
       const savedNotifications = await this.getNotifications();
       const now = new Date();
 
+      console.log("[TaskCompletionService] Vérification des tâches terminées", {
+        now: now.toISOString(),
+        savedNotificationsCount: savedNotifications.length,
+      });
+
       // Récupérer les événements depuis AsyncStorage
-      const eventsJson = await AsyncStorage.getItem("events");
-      if (!eventsJson) return;
+      const eventsJson = await AsyncStorage.getItem("@planmaster_events");
+      if (!eventsJson) {
+        console.log("[TaskCompletionService] Aucun événement trouvé dans AsyncStorage");
+        return;
+      }
 
       const events: CalendarEvent[] = JSON.parse(eventsJson);
+      console.log("[TaskCompletionService] Événements trouvés:", events.length, events.map(e => ({ title: e.title, endDate: e.endDate })));
 
       for (const event of events) {
         const endTime = new Date(event.endDate);
+        const isCompleted = endTime <= now;
+        const alreadyNotified = savedNotifications.some((n) => n.eventId === event.id && !n.dismissed);
+
+        console.log("[TaskCompletionService] Vérification:", {
+          title: event.title,
+          endTime: endTime.toISOString(),
+          isCompleted,
+          alreadyNotified,
+        });
 
         // Vérifier si la tâche est terminée et pas déjà notifiée
-        if (
-          endTime <= now &&
-          !savedNotifications.some((n) => n.eventId === event.id && !n.dismissed)
-        ) {
+        if (isCompleted && !alreadyNotified) {
           // Envoyer la notification
           const notificationId = await this.sendCompletionNotification(event);
 
