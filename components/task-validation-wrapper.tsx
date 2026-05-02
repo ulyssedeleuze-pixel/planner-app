@@ -19,7 +19,7 @@ export function TaskValidationWrapper() {
       eventId={pendingValidation.eventId}
       eventTitle={pendingValidation.eventTitle}
       endTime={pendingValidation.endTime}
-      estimatedDurationMinutes={60} // À améliorer avec les données réelles
+      estimatedDurationMinutes={pendingValidation.estimatedDurationMinutes}
       onClose={dismissValidation}
     />
   );

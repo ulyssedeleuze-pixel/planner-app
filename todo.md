@@ -52,3 +52,10 @@
 - [x] Intégrer les notifications à la fin des tâches
 - [x] Gérer la persistance des tâches complétées
 - [x] Tester le système de validation proactive end-to-end
+
+
+## Phase 3d : Synchronisation des tâches
+
+- [x] Synchroniser EventsContext et RewardsContext
+- [x] Mettre à jour TaskCompletionService pour utiliser les tâches réelles
+- [x] Tester la synchronisation avec les tâches existantes

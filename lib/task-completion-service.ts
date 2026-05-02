@@ -6,6 +6,7 @@ export interface TaskCompletionNotification {
   eventId: string;
   eventTitle: string;
   endTime: string;
+  estimatedDurationMinutes: number;
   notificationId?: string;
   dismissed: boolean;
   dismissedAt?: string;
@@ -70,11 +71,19 @@ export class TaskCompletionService {
           // Envoyer la notification
           const notificationId = await this.sendCompletionNotification(event);
 
+          // Calculer la durée estimée en minutes
+          const startTime = new Date(event.startDate);
+          const endTimeDate = new Date(event.endDate);
+          const estimatedDurationMinutes = Math.round(
+            (endTimeDate.getTime() - startTime.getTime()) / (1000 * 60)
+          );
+
           // Enregistrer la notification
           const notification: TaskCompletionNotification = {
             eventId: event.id,
             eventTitle: event.title,
             endTime: event.endDate,
+            estimatedDurationMinutes,
             notificationId,
             dismissed: false,
           };

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,25 +13,42 @@ import * as Haptics from "expo-haptics";
 import { ScreenContainer } from "@/components/screen-container";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
-import { useRewards, CREDITS_PER_HOUR } from "@/lib/rewards-context";
+import { CREDITS_PER_HOUR } from "@/lib/rewards-context";
 import { useAdventure } from "@/lib/adventure-context";
+import { TaskCompletionService, TaskCompletionNotification } from "@/lib/task-completion-service";
 
 export default function ValidationScreen() {
   const colors = useColors();
-  const { state: rewardsState, validateTask, rejectTask, getCreditsForDuration } =
-    useRewards();
   const { addCoins } = useAdventure();
+  const [pendingNotifications, setPendingNotifications] = useState<TaskCompletionNotification[]>([]);
+
+  // Charger les notifications en attente
+  useEffect(() => {
+    const loadPendingNotifications = async () => {
+      const pending = await TaskCompletionService.getPendingNotifications();
+      setPendingNotifications(pending);
+    };
+
+    loadPendingNotifications();
+
+    // S'abonner aux changements
+    const unsubscribe = TaskCompletionService.subscribe(() => {
+      loadPendingNotifications();
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const pendingTasks = useMemo(() => {
-    return rewardsState.pendingValidation.sort(
+    return pendingNotifications.sort(
       (a, b) =>
-        new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()
+        new Date(b.endTime).getTime() - new Date(a.endTime).getTime()
     );
-  }, [rewardsState.pendingValidation]);
+  }, [pendingNotifications]);
 
   const handleValidate = useCallback(
     (taskId: string, actualDurationMinutes: number) => {
-      const credits = getCreditsForDuration(actualDurationMinutes);
+      const credits = Math.round((actualDurationMinutes / 60) * CREDITS_PER_HOUR);
 
       Alert.alert(
         "Valider la tâche",
@@ -41,9 +58,9 @@ export default function ValidationScreen() {
           {
             text: "Valider",
             style: "default",
-            onPress: () => {
-              validateTask(taskId, actualDurationMinutes);
+            onPress: async () => {
               addCoins(credits);
+              await TaskCompletionService.dismissNotification(taskId);
               if (Platform.OS !== "web") {
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
               }
@@ -53,7 +70,7 @@ export default function ValidationScreen() {
         ]
       );
     },
-    [validateTask, addCoins, getCreditsForDuration]
+    [addCoins]
   );
 
   const handleReject = useCallback(
@@ -66,8 +83,8 @@ export default function ValidationScreen() {
           {
             text: "Rejeter",
             style: "destructive",
-            onPress: () => {
-              rejectTask(taskId);
+            onPress: async () => {
+              await TaskCompletionService.dismissNotification(taskId);
               if (Platform.OS !== "web") {
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
               }
@@ -76,7 +93,7 @@ export default function ValidationScreen() {
         ]
       );
     },
-    [rejectTask]
+    []
   );
 
   const styles = StyleSheet.create({
@@ -223,13 +240,13 @@ export default function ValidationScreen() {
       {pendingTasks.length > 0 ? (
         <FlatList
           data={pendingTasks}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.eventId}
           contentContainerStyle={{ paddingBottom: 40 }}
           renderItem={({ item }) => {
             const creditsAwarded = Math.round(
-              (item.actualDurationMinutes / 60) * CREDITS_PER_HOUR
+              (item.estimatedDurationMinutes / 60) * CREDITS_PER_HOUR
             );
-            const completedTime = formatTime(item.completedAt);
+            const completedTime = formatTime(item.endTime);
 
             return (
               <View style={styles.taskCard}>
@@ -240,10 +257,10 @@ export default function ValidationScreen() {
                 </View>
 
                 <Text style={styles.timeText}>
-                  Complétée à {completedTime}
+                  Fin prévue : {completedTime}
                 </Text>
                 <Text style={styles.timeText}>
-                  Durée : {Math.round(item.actualDurationMinutes)} min
+                  Durée estimée : {Math.round(item.estimatedDurationMinutes)} min
                 </Text>
 
                 <View style={styles.creditsPreview}>
@@ -260,7 +277,7 @@ export default function ValidationScreen() {
                       pressed && { opacity: 0.7 },
                     ]}
                     onPress={() =>
-                      handleValidate(item.id, item.actualDurationMinutes)
+                      handleValidate(item.eventId, item.estimatedDurationMinutes)
                     }
                   >
                     <Text style={styles.validateBtnText}>✓ Valider</Text>
@@ -271,7 +288,7 @@ export default function ValidationScreen() {
                       styles.rejectBtn,
                       pressed && { opacity: 0.7 },
                     ]}
-                    onPress={() => handleReject(item.id, item.eventTitle)}
+                    onPress={() => handleReject(item.eventId, item.eventTitle)}
                   >
                     <Text style={styles.rejectBtnText}>✕ Rejeter</Text>
                   </Pressable>
