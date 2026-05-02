@@ -143,6 +143,16 @@ const EXCALIBUR: PixelGrid = [
   [null,"#996515","#996515", null],
 ];
 
+// Jambières en cuir (legs) — 10×6
+const LEGS_LEATHER: PixelGrid = [
+  ["#7A5C10","#7A5C10","#7A5C10","#7A5C10", null, null,"#7A5C10","#7A5C10","#7A5C10","#7A5C10"],
+  ["#8B6914","#8B6914","#8B6914","#7A5C10", null, null,"#7A5C10","#8B6914","#8B6914","#8B6914"],
+  ["#9B7318","#9B7318","#8B6914","#7A5C10", null, null,"#7A5C10","#8B6914","#9B7318","#9B7318"],
+  ["#9B7318","#9B7318","#8B6914","#8B6914", null, null,"#8B6914","#8B6914","#9B7318","#9B7318"],
+  ["#8B6914","#8B6914","#7A5C10","#7A5C10", null, null,"#7A5C10","#7A5C10","#8B6914","#8B6914"],
+  ["#7A5C10","#7A5C10","#7A5C10","#7A5C10", null, null,"#7A5C10","#7A5C10","#7A5C10","#7A5C10"],
+];
+
 // Bottes (feet) — 10×5
 const BOOTS: PixelGrid = [
   ["#5C3A10","#5C3A10", null, null, null, null, null, null,"#5C3A10","#5C3A10"],
@@ -178,7 +188,7 @@ function getSlotPosition(slot: EquipmentSlot, size: number): { top: number; left
   const s = size / 200; // facteur d'échelle
   switch (slot) {
     case "head":   return { top: -18 * s,  left: 72 * s  }; // au-dessus de la tête, centré
-    case "chest":  return { top: 80 * s,   left: 15 * s  }; // torse
+    case "chest":  return { top: 80 * s,   left: 50 * s  }; // torse centré
     case "hands":  return { top: 90 * s,   left: 155 * s }; // main droite
     case "legs":   return { top: 130 * s,  left: 55 * s  }; // jambes
     case "feet":   return { top: 165 * s,  left: 45 * s  }; // pieds
