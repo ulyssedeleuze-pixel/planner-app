@@ -10,6 +10,8 @@ export interface TaskCompletionNotification {
   notificationId?: string;
   dismissed: boolean;
   dismissedAt?: string;
+  shown?: boolean; // Marque si la modale a ete affichee
+  shownAt?: string; // Quand la modale a ete affichee
 }
 
 const STORAGE_KEY = "task_completion_notifications";
@@ -184,12 +186,12 @@ export class TaskCompletionService {
   }
 
   /**
-   * Récupère les notifications non rejetées
+   * Recupere les notifications non rejetees ET non affichees
    */
   static async getPendingNotifications(): Promise<TaskCompletionNotification[]> {
     try {
       const notifications = await this.getNotifications();
-      return notifications.filter((n) => !n.dismissed);
+      return notifications.filter((n) => !n.dismissed && !n.shown);
     } catch (error) {
       console.error("Error getting pending notifications:", error);
       return [];
@@ -224,10 +226,30 @@ export class TaskCompletionService {
   }
 
   /**
-   * Force une vérification immédiate (utile pour le débogage)
+   * Force une verification immédiate (utile pour le débogage)
    */
   static async forceCheck() {
-    console.log("[TaskCompletionService] Vérification forcée");
+    console.log("[TaskCompletionService] Verification forcee");
     await this.checkCompletedTasks();
+  }
+
+  /**
+   * Marque une notification comme affichee (pour eviter les doublons de modale)
+   */
+  static async markAsShown(eventId: string) {
+    try {
+      const notifications = await this.getNotifications();
+      const notification = notifications.find((n) => n.eventId === eventId);
+
+      if (notification) {
+        notification.shown = true;
+        notification.shownAt = new Date().toISOString();
+      }
+
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
+      console.log("[TaskCompletionService] Notification marquee comme affichee:", eventId);
+    } catch (error) {
+      console.error("Error marking notification as shown:", error);
+    }
   }
 }
