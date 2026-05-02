@@ -5,24 +5,22 @@ import {
   FlatList,
   Pressable,
   StyleSheet,
-  TouchableOpacity,
   Alert,
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
-
 import { ScreenContainer } from "@/components/screen-container";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 import { useAdventure, EQUIPMENT_CATALOG, Equipment } from "@/lib/adventure-context";
-import { PixelArt, ITEM_PIXEL_ART, type PixelGrid } from "@/components/pixel-character";
+import { PixelArt, ITEM_PIXEL_ART } from "@/components/pixel-character";
 
 const RARITY_COLORS: Record<string, string> = {
-  common: "#95A5A6",
-  uncommon: "#2ECC71",
-  rare: "#3498DB",
-  epic: "#9B59B6",
+  common:    "#95A5A6",
+  uncommon:  "#2ECC71",
+  rare:      "#3498DB",
+  epic:      "#9B59B6",
   legendary: "#F39C12",
 };
 
@@ -42,31 +40,22 @@ export default function ShopScreen() {
   const handleBuy = useCallback(
     (item: Equipment) => {
       if (state.coins < item.cost) {
-        Alert.alert(
-          "Pièces insuffisantes",
-          `Il vous faut ${item.cost - state.coins} pièces de plus.`
-        );
+        Alert.alert("Pièces insuffisantes", `Il vous faut ${item.cost - state.coins} pièces de plus.`);
         return;
       }
-
-      Alert.alert(
-        "Acheter",
-        `Acheter "${item.name}" pour ${item.cost} pièces ?`,
-        [
-          { text: "Annuler", style: "cancel" },
-          {
-            text: "Acheter",
-            style: "default",
-            onPress: () => {
-              buyEquipment(item);
-              if (Platform.OS !== "web") {
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-              }
-              Alert.alert("Succès", `Vous avez acheté ${item.name} !`);
-            },
+      Alert.alert("Acheter", `Acheter "${item.name}" pour ${item.cost} pièces ?`, [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Acheter",
+          onPress: () => {
+            buyEquipment(item);
+            if (Platform.OS !== "web") {
+              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            }
+            Alert.alert("Succès", `Vous avez acheté ${item.name} !`);
           },
-        ]
-      );
+        },
+      ]);
     },
     [state.coins, buyEquipment]
   );
@@ -84,11 +73,7 @@ export default function ShopScreen() {
       justifyContent: "space-between",
       marginBottom: 12,
     },
-    headerTitle: {
-      fontSize: 22,
-      fontWeight: "700",
-      color: colors.foreground,
-    },
+    headerTitle: { fontSize: 22, fontWeight: "700", color: colors.foreground },
     coinsBadge: {
       backgroundColor: colors.primary + "20",
       paddingHorizontal: 12,
@@ -98,16 +83,8 @@ export default function ShopScreen() {
       alignItems: "center",
       gap: 4,
     },
-    coinsText: {
-      fontSize: 14,
-      fontWeight: "600",
-      color: colors.primary,
-    },
-    filterRow: {
-      flexDirection: "row",
-      gap: 8,
-      marginBottom: 0,
-    },
+    coinsText: { fontSize: 14, fontWeight: "600", color: colors.primary },
+    filterRow: { flexDirection: "row", gap: 8 },
     filterBtn: {
       paddingHorizontal: 12,
       paddingVertical: 6,
@@ -116,21 +93,12 @@ export default function ShopScreen() {
       borderWidth: 1,
       borderColor: colors.border,
     },
-    filterBtnActive: {
-      backgroundColor: colors.primary,
-      borderColor: colors.primary,
-    },
-    filterBtnText: {
-      fontSize: 12,
-      fontWeight: "600",
-      color: colors.foreground,
-    },
-    filterBtnTextActive: {
-      color: "#FFFFFF",
-    },
+    filterBtnActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+    filterBtnText: { fontSize: 12, fontWeight: "600", color: colors.foreground },
+    filterBtnTextActive: { color: "#FFFFFF" },
     itemCard: {
       marginHorizontal: 20,
-      marginBottom: 12,
+      marginTop: 12,
       backgroundColor: colors.surface,
       borderRadius: 12,
       padding: 14,
@@ -140,81 +108,31 @@ export default function ShopScreen() {
       alignItems: "center",
       gap: 12,
     },
-    itemIcon: {
-      fontSize: 40,
-      width: 50,
-      textAlign: "center",
-    },
-    itemInfo: {
-      flex: 1,
-    },
-    itemName: {
-      fontSize: 15,
-      fontWeight: "600",
-      color: colors.foreground,
-    },
-    itemDesc: {
-      fontSize: 12,
-      color: colors.muted,
-      marginTop: 2,
-    },
-    itemMeta: {
-      flexDirection: "row",
-      gap: 8,
-      marginTop: 6,
-      alignItems: "center",
-    },
-    rarityBadge: {
-      paddingHorizontal: 8,
-      paddingVertical: 2,
-      borderRadius: 4,
-    },
-    rarityText: {
-      fontSize: 10,
-      fontWeight: "600",
-      color: "#FFFFFF",
-    },
-    levelBadge: {
-      backgroundColor: colors.border,
-      paddingHorizontal: 6,
-      paddingVertical: 2,
-      borderRadius: 4,
-    },
-    levelText: {
-      fontSize: 10,
-      fontWeight: "600",
-      color: colors.muted,
-    },
-    buyBtn: {
-      backgroundColor: colors.primary,
-      paddingHorizontal: 14,
-      paddingVertical: 8,
+    // Cadre pixel art de l'item dans la boutique
+    itemIconBox: {
+      width: 54,
+      height: 54,
+      backgroundColor: "#0F0F18",
       borderRadius: 8,
-      alignItems: "center",
-    },
-    buyBtnDisabled: {
-      backgroundColor: colors.muted + "40",
-    },
-    buyBtnText: {
-      fontSize: 12,
-      fontWeight: "600",
-      color: "#FFFFFF",
-    },
-    costText: {
-      fontSize: 13,
-      fontWeight: "600",
-      color: colors.primary,
-    },
-    emptyContainer: {
-      flex: 1,
+      borderWidth: 1,
+      borderColor: colors.primary + "50",
       alignItems: "center",
       justifyContent: "center",
-      paddingVertical: 60,
     },
-    emptyText: {
-      fontSize: 16,
-      color: colors.muted,
-    },
+    itemInfo: { flex: 1 },
+    itemName: { fontSize: 15, fontWeight: "600", color: colors.foreground },
+    itemDesc: { fontSize: 12, color: colors.muted, marginTop: 2 },
+    itemMeta: { flexDirection: "row", gap: 8, marginTop: 6, alignItems: "center" },
+    rarityBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4 },
+    rarityText: { fontSize: 10, fontWeight: "600", color: "#FFFFFF" },
+    levelBadge: { backgroundColor: colors.border, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 },
+    levelText: { fontSize: 10, fontWeight: "600", color: colors.muted },
+    buyBtn: { backgroundColor: colors.primary, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8, alignItems: "center" },
+    buyBtnDisabled: { backgroundColor: colors.muted + "40" },
+    buyBtnText: { fontSize: 12, fontWeight: "600", color: "#FFFFFF" },
+    costText: { fontSize: 13, fontWeight: "600", color: colors.primary },
+    emptyContainer: { flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 60 },
+    emptyText: { fontSize: 16, color: colors.muted },
   });
 
   return (
@@ -231,35 +149,23 @@ export default function ShopScreen() {
             <Text style={styles.coinsText}>{state.coins}</Text>
           </View>
         </View>
-
-        {/* Filters */}
+        {/* Filtres */}
         <View style={styles.filterRow}>
-          {(["all", "common", "uncommon", "rare", "epic", "legendary"] as const).map(
-            (f) => (
-              <Pressable
-                key={f}
-                style={({ pressed }) => [
-                  styles.filterBtn,
-                  filter === f && styles.filterBtnActive,
-                  pressed && { opacity: 0.7 },
-                ]}
-                onPress={() => setFilter(f)}
-              >
-                <Text
-                  style={[
-                    styles.filterBtnText,
-                    filter === f && styles.filterBtnTextActive,
-                  ]}
-                >
-                  {f === "all" ? "Tous" : f.charAt(0).toUpperCase() + f.slice(1)}
-                </Text>
-              </Pressable>
-            )
-          )}
+          {(["all", "common", "uncommon", "rare", "epic", "legendary"] as const).map((f) => (
+            <Pressable
+              key={f}
+              style={[styles.filterBtn, filter === f && styles.filterBtnActive]}
+              onPress={() => setFilter(f)}
+            >
+              <Text style={[styles.filterBtnText, filter === f && styles.filterBtnTextActive]}>
+                {f === "all" ? "Tous" : f.charAt(0).toUpperCase() + f.slice(1)}
+              </Text>
+            </Pressable>
+          ))}
         </View>
       </View>
 
-      {/* Items List */}
+      {/* Liste des items */}
       <FlatList
         data={filteredItems}
         keyExtractor={(item) => item.id}
@@ -267,42 +173,36 @@ export default function ShopScreen() {
         renderItem={({ item }) => {
           const canAfford = state.coins >= item.cost;
           const alreadyOwned = state.inventory.some((inv) => inv.id === item.id);
+          const grid = ITEM_PIXEL_ART[item.id];
 
           return (
             <View style={styles.itemCard}>
-              <View style={{ width: 50, height: 50, alignItems: "center", justifyContent: "center" }}>
-                <PixelArt grid={ITEM_PIXEL_ART[item.id] || []} pixelSize={3} />
+              {/* Icône pixel art dans un cadre sombre */}
+              <View style={styles.itemIconBox}>
+                {grid ? (
+                  <PixelArt grid={grid} pixelSize={3} />
+                ) : (
+                  <Text style={{ fontSize: 28 }}>{item.icon}</Text>
+                )}
               </View>
+
               <View style={styles.itemInfo}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemDesc}>{item.description}</Text>
                 <View style={styles.itemMeta}>
-                  <View
-                    style={[
-                      styles.rarityBadge,
-                      {
-                        backgroundColor:
-                          RARITY_COLORS[item.rarity] || colors.primary,
-                      },
-                    ]}
-                  >
-                    <Text style={styles.rarityText}>
-                      {item.rarity.toUpperCase()}
-                    </Text>
+                  <View style={[styles.rarityBadge, { backgroundColor: RARITY_COLORS[item.rarity] || colors.primary }]}>
+                    <Text style={styles.rarityText}>{item.rarity.toUpperCase()}</Text>
                   </View>
                   <View style={styles.levelBadge}>
                     <Text style={styles.levelText}>Niv. {item.level}</Text>
                   </View>
                 </View>
               </View>
+
               <View style={{ alignItems: "flex-end", gap: 6 }}>
                 <Text style={styles.costText}>{item.cost}</Text>
                 <Pressable
-                  style={({ pressed }) => [
-                    styles.buyBtn,
-                    (!canAfford || alreadyOwned) && styles.buyBtnDisabled,
-                    pressed && { opacity: 0.8 },
-                  ]}
+                  style={[styles.buyBtn, (!canAfford || alreadyOwned) && styles.buyBtnDisabled]}
                   onPress={() => handleBuy(item)}
                   disabled={!canAfford || alreadyOwned}
                 >
