@@ -349,3 +349,5 @@ const styles = StyleSheet.create({
   container: { position: "relative" },
   overlay:   { position: "absolute" },
 });
+export { ITEM_PIXEL_ART };
+export type { PixelGrid };

@@ -16,6 +16,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 import { useAdventure, EQUIPMENT_CATALOG, Equipment } from "@/lib/adventure-context";
+import { PixelArt, ITEM_PIXEL_ART, type PixelGrid } from "@/components/pixel-character";
 
 const RARITY_COLORS: Record<string, string> = {
   common: "#95A5A6",
@@ -269,7 +270,9 @@ export default function ShopScreen() {
 
           return (
             <View style={styles.itemCard}>
-              <Text style={styles.itemIcon}>{item.icon}</Text>
+              <View style={{ width: 50, height: 50, alignItems: "center", justifyContent: "center" }}>
+                <PixelArt grid={ITEM_PIXEL_ART[item.id] || []} pixelSize={3} />
+              </View>
               <View style={styles.itemInfo}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemDesc}>{item.description}</Text>
