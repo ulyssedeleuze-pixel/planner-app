@@ -68,6 +68,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="adventure"
+        options={{
+          title: "Aventure",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={24} name="gamecontroller.fill" color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

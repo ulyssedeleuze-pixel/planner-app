@@ -17,3 +17,16 @@
 - [x] Intégrer les notifications locales (expo-notifications)
 - [x] Mettre à jour app.config.ts (nom, logo)
 - [x] Sauvegarder le checkpoint final
+
+## Phase 3 : Onglet Aventure (Gamification)
+
+- [x] Générer le personnage pixelisé style dark fantasy
+- [x] Créer le contexte/store pour le système de gamification (pièces, équipements, progression)
+- [x] Créer les types TypeScript pour les équipements et le personnage
+- [x] Développer l'écran principal de l'Aventure (affichage du personnage + équipements)
+- [x] Créer la boutique d'équipements avec achat et upgrade
+- [x] Intégrer le système de pièces (gain automatique à la complétion des tâches)
+- [x] Ajouter les animations d'équipement sur le personnage
+- [x] Ajouter l'onglet "Aventure" à la navigation
+- [x] Tester le système de gamification end-to-end
+- [x] Sauvegarder le checkpoint final

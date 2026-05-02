@@ -15,6 +15,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 import { useEvents, CalendarEvent } from "@/lib/events-context";
+import { useAdventure } from "@/lib/adventure-context";
 import {
   DAYS_FR,
   MONTHS_FR,
