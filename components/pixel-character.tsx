@@ -185,14 +185,14 @@ const ITEM_PIXEL_ART: Record<string, PixelGrid> = {
 // ─── Positions absolues sur le personnage (en px pour size=200) ───────────────
 
 function getSlotPosition(slot: EquipmentSlot, size: number): { top: number; left: number } {
-  const s = size / 200; // facteur d'échelle
+  const s = size / 200;
   switch (slot) {
-    case "head":   return { top: -18 * s,  left: 72 * s  }; // au-dessus de la tête, centré
-    case "chest":  return { top: 80 * s,   left: 50 * s  }; // torse centré
-    case "hands":  return { top: 90 * s,   left: 155 * s }; // main droite
-    case "legs":   return { top: 130 * s,  left: 55 * s  }; // jambes
-    case "feet":   return { top: 165 * s,  left: 45 * s  }; // pieds
-    case "weapon": return { top: 70 * s,   left: -20 * s }; // main gauche (arme)
+    case "head":   return { top: 10 * s,  left: 78 * s  }; // sur la tête, centré
+    case "chest":  return { top: 78 * s,  left: 72 * s  }; // torse centré
+    case "hands":  return { top: 90 * s,  left: 140 * s }; // main droite
+    case "legs":   return { top: 118 * s, left: 68 * s  }; // jambes centré
+    case "feet":   return { top: 158 * s, left: 65 * s  }; // pieds
+    case "weapon": return { top: 75 * s,  left: 28 * s  }; // main gauche (arme)
   }
 }
 
